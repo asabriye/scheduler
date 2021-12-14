@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 import "components/Application.scss";
 
 import DayList from "./DayList";
+
+import Appointment from "components/Appointment"
 
 
 const days = [
@@ -21,6 +24,49 @@ const days = [
     name: "Wednesday",
     spots: 0,
   },
+];
+
+const appointments = [
+  {
+    id: 1,
+    time: "12pm",
+  },
+  {
+    id: 2,
+    time: "1pm",
+    interview: {
+      student: "Lydia Miller-Jones",
+      interviewer: {
+        id: 1,
+        name: "Sylvia Palmer",
+        avatar: "https://i.imgur.com/LpaY82x.png",
+      }
+    }
+  },
+  {
+    id: 3,
+    time: "3pm",
+    interview: {
+      student: "Naomi Campbell",
+      interviewer: {
+        id: 1,
+        name: "Sylvia Palmer",
+        avatar: "https://i.imgur.com/LpaY82x.png",
+      }
+    }
+  },
+  {
+    id: 4,
+    time: "12pm",
+    interview: {
+      student: "Justin Timberlake",
+      interviewer: {
+        id: 1,
+        name: "Sylvia Palmer",
+        avatar: "https://i.imgur.com/LpaY82x.png",
+      }
+    }
+  }
 ];
 
 export default function Application(props) {
@@ -46,7 +92,7 @@ export default function Application(props) {
       </section>
       <section className="schedule">
 
-        {/* Replace this with the schedule elements durint the "The Scheduler" activity. */}
+        <ul>{appointments}</ul>
       </section>
     </main>
   );
