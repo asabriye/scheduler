@@ -15,6 +15,9 @@ import InterviewerListItem from "components/InterviewerListItem";
 
 import InterviewerList from "components/InterviewerList"
 
+import Appointment from "components/Appointment/index.js";
+
+// BUTTON 
 
 storiesOf("Button", module)
   .addParameters({
@@ -31,6 +34,8 @@ storiesOf("Button", module)
       Disabled
     </Button>
   ));
+
+// DAY LIST ITEM
 
 storiesOf("DayListItem", module)
   .addParameters({
@@ -61,6 +66,8 @@ const days = [
   },
 ];
 
+// DAY LIST
+
 storiesOf("DayList", module)
   .addParameters({
     backgrounds: [{ name: "dark", value: "#222f3e", default: true }],
@@ -80,6 +87,8 @@ const interviewer = {
   name: "Sylvia Palmer",
   avatar: "https://i.imgur.com/LpaY82x.png"
 };
+
+// INTERVIEWER LIST ITEM
 
 storiesOf("InterviewerListItem", module)
   .addParameters({
@@ -117,6 +126,8 @@ const interviewers = [
   { id: 5, name: "Sven Jones", avatar: "https://i.imgur.com/twYrpay.jpg" }
 ];
 
+// INTERVIEWER LIST 
+
 storiesOf("InterviewerList", module)
   .addParameters({
     backgrounds: [{ name: "dark", value: "#222f3e", default: true }]
@@ -138,3 +149,11 @@ storiesOf("InterviewerList", module)
       onChange={action("setInterviewer")}
     />
   ));
+
+//APPOINTMENT
+storiesOf("Appointment", module)
+  .addParameters({
+    backgrounds: [{ name: "white", value: "#fff", default: true }]
+  })
+  .add("Appointment", () => <Appointment />)
+  .add("Appointment with Time", () => <Appointment time="12pm" />);
