@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 
 import "components/Application.scss";
 
 import DayList from "./DayList";
 
-import Appointment from "components/Appointment"
+import Appointment from "./Appointment"
 
 
 const days = [
@@ -92,7 +91,7 @@ export default function Application(props) {
       </section>
       <section className="schedule">
 
-        <ul>{appointments}</ul>
+        <Appointment />
       </section>
     </main>
   );
