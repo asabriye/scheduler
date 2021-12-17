@@ -7,7 +7,7 @@ import DayList from "./DayList";
 import Appointment from "./Appointment"
 
 
-import { getAppointmentsForDay } from "helpers/selectors";
+import { getAppointmentsForDay, getInterview, getInterviewsForDay } from "helpers/selectors";
 
 const appointments = [
   {
@@ -56,19 +56,20 @@ export default function Application(props) {
   const [state, setState] = useState({
     day: "Monday",
     days: [],
-    appointments: {}
+    appointments: {},
+    interviewers: {}
   });
-  const dailyAppointments = [];
+  // const dailyAppointments = [];
   const setDay = day => setState({ ...state, day });
-  const appointments = getAppointmentsForDay(state, state.day).map(appointment => {
-    return (
-      <Appointment id={appointment.id} time={appointment.time} interview={appointment.interview} />
-    )
-  })
+  // const appointments = getAppointmentsForDay(state, state.day).map(appointment => {
+  //   return (
+  //     <Appointment id={appointment.id} time={appointment.time} interview={appointment.interview} />
+  //   )
+  // })
   useEffect(() => {
     axios.get('http://localhost:8001/api/days')
       .then(response => {
-        console.log(response.data)
+        // console.log(response.data)
         Promise.all([
           Promise.resolve(axios.get("http://localhost:8001/api/days")),
           Promise.resolve(axios.get("http://localhost:8001/api/appointments")),
@@ -84,6 +85,20 @@ export default function Application(props) {
         });
       })
   }, [])
+  const appointments = getAppointmentsForDay(state, state.day);
+  const interviewers = getInterviewsForDay(state, state.day);
+  const schedule = appointments.map(appointment => {
+    const interview = getInterview(state, appointment.interview);
+    return (
+      <Appointment
+        key={appointment.id}
+        id={appointment.id}
+        time={appointment.time}
+        interview={interview}
+        interviewers={interviewers}
+      />
+    );
+  });
   return (
     <main className="layout">
       <section className="sidebar">
@@ -109,7 +124,7 @@ export default function Application(props) {
 
       </section>
       <section className="schedule">
-        {appointments}
+        {schedule}
       </section>
 
     </main>
