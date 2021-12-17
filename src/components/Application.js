@@ -7,23 +7,7 @@ import DayList from "./DayList";
 import Appointment from "./Appointment"
 
 
-const days = [
-  {
-    id: 1,
-    name: "Monday",
-    spots: 2,
-  },
-  {
-    id: 2,
-    name: "Tuesday",
-    spots: 5,
-  },
-  {
-    id: 3,
-    name: "Wednesday",
-    spots: 0,
-  },
-];
+import { getAppointmentsForDay } from "helpers/selectors";
 
 const appointments = [
   {
@@ -69,30 +53,65 @@ const appointments = [
 ];
 
 export default function Application(props) {
-  const [day, setDay] = useState("Monday");
+  const [state, setState] = useState({
+    day: "Monday",
+    days: [],
+    appointments: {}
+  });
+  const dailyAppointments = [];
+  const setDay = day => setState({ ...state, day });
+  const appointments = getAppointmentsForDay(state, state.day).map(appointment => {
+    return (
+      <Appointment id={appointment.id} time={appointment.time} interview={appointment.interview} />
+    )
+  })
+  useEffect(() => {
+    axios.get('http://localhost:8001/api/days')
+      .then(response => {
+        console.log(response.data)
+        Promise.all([
+          Promise.resolve(axios.get("http://localhost:8001/api/days")),
+          Promise.resolve(axios.get("http://localhost:8001/api/appointments")),
+          Promise.resolve(axios.get("http://localhost:8001/api/interviewers")),
+        ]).then(all => {
+
+          setState(prev => ({
+            ...prev,
+            days: all[0].data,
+            appointments: all[1].data,
+            interviewers: all[2].data
+          }));
+        });
+      })
+  }, [])
   return (
     <main className="layout">
       <section className="sidebar">
+
         <img
           className="sidebar--centered"
           src="images/logo.png"
-          alt="Interview Scheduler"
-        />
-        <DayList days={days} day={day} setDay={setDay}
-        />
+          alt="Interview Scheduler" />
         <hr className="sidebar__separator sidebar--centered" />
-        <nav className="sidebar__menu"></nav>
+        <nav className="sidebar__menu">
+          <DayList
+            days={days}
+            day={day}
+            days={state.days}
+            day={state.day}
+            setDay={setDay}
+          />
+        </nav>
         <img
           className="sidebar__lhl sidebar--centered"
           src="images/lhl.png"
-          alt="Lighthouse Labs"
-        />
-        {/* Replace this with the sidebar elements during the "Project Setup & Familiarity" activity. */}
+          alt="Lighthouse Labs" />
+
       </section>
       <section className="schedule">
-
-        <Appointment />
+        {appointments}
       </section>
+
     </main>
   );
 }
