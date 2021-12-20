@@ -1,7 +1,7 @@
 # Interview Scheduler
 
-!["Add Appointment"]()
-!["Confirmed Appointment"]()
+!["Add Appointment"](https://github.com/asabriye/scheduler/blob/master/public/pics/create.png)
+!["Confirmed Appointment"](https://github.com/asabriye/scheduler/blob/master/public/pics/confirmed.png)
 
 # Behavioural Requirements
 
