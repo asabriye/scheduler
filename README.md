@@ -1,5 +1,8 @@
 # Interview Scheduler
 
+!["Add Appointment"]()
+!["Confirmed Appointment"]()
+
 # Behavioural Requirements
 
 Interviews can be booked between Monday and Friday.
