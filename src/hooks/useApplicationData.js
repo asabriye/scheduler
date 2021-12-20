@@ -11,6 +11,13 @@ export default function useApplicationData() {
   });
   const setDay = day => setState({ ...state, day });
 
+  const updateSpots = (day, appointments) =>
+    day.appointments.length -
+    day.appointments.reduce(
+      (count, id) => (appointments[id].interview ? count + 1 : count), 0
+    );
+
+
   useEffect(() => {
     Promise.all([
       axios.get("http://localhost:8001/api/days"),
@@ -29,13 +36,6 @@ export default function useApplicationData() {
 
   function bookInterview(id, interview) {
 
-    // const spotsLeft = state.days.forEach(day => {
-    //   if (day.name ===state.day) {
-    //     day.spots--;
-    //   }
-    //   return day;
-    //  })
-
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -44,23 +44,24 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     }
+    const days = state.days.map(day => {
+      if (day.appointments.includes(id)) {
+        return { ...day, spots: updateSpots(day, appointments) }
+      }
+      return day;
+    })
 
 
-
-    return (axios.put(`http://localhost:8001/api/appointments/${id}`, appointment).then(setState({
-      ...state,
-      appointments
-    })));
+    return (axios.put(`http://localhost:8001/api/appointments/${id}`, appointment).then(() => {
+      setState({
+        ...state,
+        appointments,
+        days
+      })
+    }));
   };
 
   function cancelInterview(id) {
-
-    // const spotsLeft = state.days.forEach(day => {
-    //   if (day.name ===state.day) {
-    //     day.spots--;
-    //   }
-    //   return day;
-    //  })
 
     const appointment = {
       ...state.appointments[id],
@@ -70,10 +71,16 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     }
-
+    const days = state.days.map(day => {
+      if (day.appointments.includes(id)) {
+        return { ...day, spots: updateSpots(day, appointments) }
+      }
+      return day;
+    })
     return (axios.delete(`http://localhost:8001/api/appointments/${id}`, appointment).then(setState({
       ...state,
-      appointments
+      appointments,
+      days
     })));
   }
 
