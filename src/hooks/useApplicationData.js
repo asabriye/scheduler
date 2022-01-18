@@ -77,7 +77,7 @@ export default function useApplicationData() {
       }
       return day;
     })
-    return (axios.delete(`http://localhost:8001/api/appointments/${id}`, appointment).then(setState({
+    return (axios.delete(`http://localhost:8001/api/appointments/${id}`).then(setState({
       ...state,
       appointments,
       days
